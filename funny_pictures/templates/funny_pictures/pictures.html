@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Funny Images{% endblock %}
+{% block style %}
+#images {
+	width: auto;
+	height: auto;
+	display: inline-block;
+}
+#img_box {
+	position: relative;
+	width: 32%;
+	height: 32%;
+	display: inline-block;
+}
+#like { position: absolute; bottom: 1%; left: 0%;}
+#comment { position: absolute; bottom: 1%; left: 40%;}
+#share { position: absolute; bottom: 1%; left: 80%;}
+#interact {display: none;}
+#funny_img:hover + #interact {display: block;}
+{% endblock %}
+{% block content %}
+<input type="hidden" value="{{ csrf_token }}">
+<div id="images">
+	{% for img in images %}
+		<div id='img_box'>
+		<img id='funny_img' src="/media/{{img}}">
+		<div id='interact'>
+		<a id='like' href='#'><img alt='like' src="{% static '/funny_pictures/icon/like.png' %}" width='11%' height='11%'></a>
+		<a id='comment' href='#'><img alt='comment' src="{% static '/funny_pictures/icon/comment.gif' %}" width='20%' height='20%'></a>
+		<a id='share' href='#'><img alt='share' src="{% static '/funny_pictures/icon/share.gif' %}" height='60%' width='60%'></a>
+		</div></div>
+	{% endfor %}
+</div>
+{% endblock %}
+{% block script %}
+$(function(){
+	$("[id='interact']").click(function(){
+		var LINK = $(this).parent("div").children("#funny_img").attr('src');
+		link = '/pictures/'+LINK.substring(LINK.lastIndexOf("/") + 1);
+		$(this).children('#like').attr('href',link);
+		$(this).children('#comment').attr('href',link);
+		$(this).children('#share').attr('href',link);
+	});
+	var w = Math.floor($(window).width()/4.4);
+	$("[id='funny_img']").css("width",w);
+	$("[id='funny_img']").css("height",w);
+	$("[id='funny_img']").click(function(){
+		var link = $(this).attr('src');
+		link = link.substring(link.lastIndexOf("/") + 1);
+		window.location.href=link;
+	});
+});
+jQuery(function($) {
+	csrf_token = $("div input:first").val();
+	$('#content').on('scroll', function() {
+		if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+			N = $('#images > #img_box').length;
+			$.ajax({
+				type: "POST",
+				datatype: "json",
+				data: {N_img : N,
+					csrfmiddlewaretoken: csrf_token},
+				url: '/pictures/',
+				success: function(response) {
+					$.each( response.images, function(key, value){
+						var img = "<div id='img_box'><img id='funny_img' src='/media/"+value+"'><div id='interact'><a id='like' href='#'><img alt='like' src='{% static "/funny_pictures/icon/like.png" %}' width='11%' width='11%'></a><a id='comment' href='#'><img alt='comment' src='{% static '/funny_pictures/icon/comment.gif' %}' width='20%' height='20%'></a><a id='share' href='#'><img alt='share' src='{% static "/funny_pictures/icon/share.gif" %}' width='60%' height='60%'></a></div></div>";
+						$("#images").append(img);
+						var w = Math.floor($(window).width()/4.4);
+						$("[id='funny_img']").css("width",w);
+						$("[id='funny_img']").css("height",w);
+						$("[id='interact']").click(function(){
+							var LINK = $(this).parent("div").children("#funny_img").attr('src');
+							link = '/pictures/'+LINK.substring(LINK.lastIndexOf("/") + 1);
+							$(this).children('#like').attr('href',link);
+							$(this).children('#comment').attr('href',link);
+							$(this).children('#share').attr('href',link);
+						});
+						$("[id='funny_img']").click(function(){
+							var link = $(this).attr('src');
+							link = link.substring(link.lastIndexOf("/") + 1);
+							window.location.href=link;
+						});
+					});
+				}
+			});
+		}
+	})
+});
+{% endblock %}

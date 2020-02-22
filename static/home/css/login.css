@@ -1,0 +1,18 @@
+#login_form {
+	background-color: #113349;
+	color: #778899;
+	border-radius: 8px;
+	overflow: hidden;
+	width: 18em;
+	min-width: 100px;
+	margin: 60px auto;
+	line-width: 3em;}
+#login_center {
+	width: 13em;
+	margin: 60px auto;}
+	p.hint {
+	font-size: 14px;
+	}
+	p.hint a {
+	color: red;
+	}

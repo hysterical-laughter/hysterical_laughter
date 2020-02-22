@@ -1,0 +1,49 @@
+html {
+	height: 100%;
+	width: 100%;
+}
+body {
+	padding: 0;
+	margin: 0;
+	position: relative;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	float: center;
+}
+#body::after {
+	content: '';
+	display: block;
+}
+#footer {
+	position: absolute;
+	font-size : 10px;
+	bottom: 0px;
+	width: 100%;
+	background: #559833;
+}
+#header {
+	color: white;
+	width: 100%;
+	text-align: right;
+	background-color: #771155;
+}
+#body {
+	background-repeat: no-repeat;
+	background-size: 100% 500%;
+	background-position: center;
+}
+a {
+	color: #227892;
+	text-decoration: none;
+}
+a:hover {
+	color: red;
+	background-color: white;
+}
+li {
+	list-style-type: none;
+}
+#header li {
+	display: inline;
+}

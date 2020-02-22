@@ -1,0 +1,27 @@
+#signup_form {
+	background-color: #113349;
+	color: #778899;
+	border-radius: 8px;
+	overflow: hidden;
+	width: 18em;
+	min-width: 100px;
+	margin: 60px auto;
+	line-width: 3em;}
+#signup_center {
+	width: 13em;
+	margin: 60px auto;}
+p.hint {
+	font-size: 14px;}
+a {
+	color: #998855;}
+
+form span {
+	display: None;
+	}
+label.helptext {
+ display: None;
+ }
+.errorlist {
+	font-size: 11px;
+	display: left;
+}

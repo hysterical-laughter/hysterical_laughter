@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Funny Image{% endblock %}
+{% block style %}
+.img_content {
+	margin: auto;
+	padding: 0% 0.5%;
+	height: 100%;
+	width: 100%;
+}
+#img_box {
+		position: relative;
+		float: left;
+		width: 60%;
+		height: auto;
+		display: inline-block;
+		}
+#comment_box {
+	width: 40%;
+	height: auto;
+	max-height: 75%;
+	min-height: 80%;
+	display: inline_block;
+	overflow-y: scroll;
+	}
+#user { border: 1px solid #445142;background-color: #885544;}
+#username { color: #250253; }
+#like { position: absolute; top: 100%; left: 0%;}
+#share { position: absolute; top: 100%; left: 53%;}
+{% endblock %}
+{% block content %}
+<div class='img_content'>
+	<input type="hidden" value="{{ csrf_token }}">
+	<div id='img_box'>
+		<img id='funny_img' src="/media/{{img}}">
+		<div id='interact'>
+			<a id='like' href='#'><img alt='like' src="{% static '/funny_pictures/icon/like.png' %}" width='15%' height='15%'></a>
+			<div id='share' class="a2a_kit a2a_kit_size_32 a2a_default_style"><a class="a2a_dd" href="https://www.addtoany.com/share"></a><a class="a2a_button_facebook"></a><a class="a2a_button_twitter"></a><a class="a2a_button_email"></a></div><script async src="https://static.addtoany.com/menu/page.js"></script>
+		</div>
+	</div>
+	<div id='comment_box'>
+		<form method="POST">
+			{% csrf_token %}
+			<textarea name="comment" cols="40" rows="2" maxlength='500' required="" id="comment"></textarea>
+			<input id="submit" type="submit" value="Comment"/></br>
+		</form>
+		{% for C in com %}
+		<div id='user'>
+			<span id='username'>{{ C.username }}</span>
+			<p id='comment'>{{ C.comment }}</p>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+$(function(){
+	var w = Math.floor($(window).width());
+	var h = Math.floor($(window).height());
+	if (w>'400'){$("[id='funny_img']").css("width",w/2.5,"height",h/1.4);
+		$("[id='comment_box']").css({'float':'right'});}
+	if (w<'400'){
+		$("[id='funny_img']").css({"width":w/1.4,"height":h/2});
+		$("#share").css("left","42%");
+		}
+	$("#like").click(function(){
+		var csrf_token = $("div input:first").val();
+		var IMG = $("#funny_img").attr('src');
+		IMG = IMG.substring(IMG.lastIndexOf("/") + 1);
+		URL = '/pictures/like/';
+		var ACT = "like"
+		$.ajax({
+			type: "POST",
+			datatype: "json",
+			data: {img : IMG, reaction : ACT, csrfmiddlewaretoken: csrf_token},
+			url: URL,
+			success: function(response) {
+				if(response.status == 'no'){
+					window.location.href='/';
+				};
+				$("#like").css('display','none');
+			}
+		});
+	});
+});
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Funny Videos{% endblock %}
+{% block style %}
+	#videos {
+		width: 84%;
+		font-size: 11px;
+		padding: 5px 5px 5px 5px;
+		border: #999999 1px solid;
+	}
+	#videos iframe {
+		height: 200px;
+		width: 200px;
+		padding: 5px 5px 5px 5px;
+	}
+{% endblock %}
+{% block content %}
+<div id="videos">
+{% for video in videos %}
+<iframe src="{{video}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{% endfor %}
+</div>
+{% endblock %}
+

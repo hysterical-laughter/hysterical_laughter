@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Log in{% endblock %}
+{% block head %}
+{% if request.user.is_authenticated %}
+	<script type="text/javascript">location.replace("/pictures/")</script>
+{% endif %}
+	<link type="text/css" href="{% static 'home/css/login.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+<div id="login_form">
+<div id="login_center"><h5>Login into your Account</h5>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit">Log in</button>
+<p class="hint">You don't have an account: <a href="/signup/">Sign up here</a></p>
+</form>
+</div>
+</div>
+{% endblock %}
